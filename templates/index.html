@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signature Verification</title>
+</head>
+<body>
+    <h1>Welcome to Signature Verification</h1>
+    
+    <!-- Training Section -->
+    <h2>Train the Model</h2>
+    <form action="/" method="POST">
+        <button type="submit" name="train">Train the Model</button>
+    </form>
+    
+    {% if history %}
+    <h3>Training Results</h3>
+    <h4>Accuracy vs Validation Accuracy</h4>
+    <img src="{{ url_for('static', filename='training_accuracy.png') }}" alt="Training Accuracy">
+    <h4>Loss vs Validation Loss</h4>
+    <img src="{{ url_for('static', filename='training_loss.png') }}" alt="Training Loss">
+    {% endif %}
+
+    <!-- Evaluation Section -->
+    <h2>Evaluate the Model</h2>
+    <form action="/" method="POST">
+        <button type="submit" name="evaluate">Evaluate the Model</button>
+    </form>
+
+    {% if report %}
+    <h3>Evaluation Report</h3>
+    <pre>{{ report }}</pre>
+    <h3>Confusion Matrix</h3>
+    <pre>{{ cm }}</pre>
+    {% endif %}
+
+    <!-- Prediction Section -->
+    <h2>Upload a Signature for Prediction</h2>
+    <form action="/" method="POST" enctype="multipart/form-data">
+        <input type="file" name="image" accept="image/*" required>
+        <button type="submit" name="predict">Predict Signature</button>
+    </form>
+
+    {% if prediction %}
+    <h3>Prediction Result</h3>
+    <p>The signature is: {{ prediction }}</p>
+    {% endif %}
+</body>
+</html>

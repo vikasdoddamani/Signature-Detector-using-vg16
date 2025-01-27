@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signature Verification Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #result {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #result p {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+
+        #result span {
+            font-weight: bold;
+        }
+
+        #result .high-consistency {
+            color: green;
+        }
+
+        #result .low-consistency {
+            color: red;
+        }
+
+        h3 {
+            margin-top: 30px;
+        }
+
+        .images {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .images img {
+            max-width: 300px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .upload-section {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .upload-section input {
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .upload-section button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .upload-section button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Signature Verification Result</h1>
+
+    <!-- Result Section -->
+    <div id="result">
+        <p><strong>Prediction:</strong> <span id="prediction"></span></p>
+        <p><strong>Confidence:</strong> <span id="confidence"></span></p>
+        <p><strong>Signature Consistency:</strong> <span id="consistency"></span></p>
+        <p><strong>Forgery Reasons:</strong> <span id="reasons"></span></p>
+    </div>
+
+    <!-- Processed Images Section -->
+    <h3>Processed Images:</h3>
+    <div class="images">
+        <div>
+            <img id="rgb_image" src="" alt="RGB Image" />
+            <p>RGB Image</p>
+        </div>
+        <div>
+            <img id="resized_image" src="" alt="Resized Image" />
+            <p>Resized Image</p>
+        </div>
+        <div>
+            <img id="normalized_image" src="" alt="Normalized Image" />
+            <p>Normalized Image</p>
+        </div>
+        <div>
+            <img id="sift_image" src="" alt="SIFT Image" />
+            <p>SIFT Image</p>
+        </div>
+    </div>
+
+    <!-- Image Upload Section -->
+    <div class="upload-section">
+        <h3>Upload a Signature Image for Verification</h3>
+        <input type="file" id="imageInput" accept="image/*">
+        <button onclick="submitImage()">Submit</button>
+    </div>
+
+    <script>
+        // Function to display the prediction results and images
+        function displayResults(result) {
+            document.getElementById("prediction").textContent = result.prediction === 0 ? 'Genuine' : 'Forged';
+            document.getElementById("confidence").textContent = result.confidence.toFixed(2);
+            document.getElementById("consistency").textContent = result.signature_consistency;
+            document.getElementById("reasons").textContent = result.reasons;
+            
+            
+            // Adding color to signature consistency (green for high, red for low)
+            const consistencyElement = document.getElementById("consistency");
+            if (result.signature_consistency === "High") {
+                consistencyElement.classList.add("high-consistency");
+                consistencyElement.classList.remove("low-consistency");
+            } else {
+                consistencyElement.classList.add("low-consistency");
+                consistencyElement.classList.remove("high-consistency");
+            }
+
+            // Update images based on the result paths
+            document.getElementById("rgb_image").src = result.rgb_image;
+            document.getElementById("resized_image").src = result.resized_image;
+            document.getElementById("normalized_image").src = result.normalized_image;
+            document.getElementById("sift_image").src = result.sift_image;
+        }
+
+        // Function to submit the image for prediction
+        function submitImage() {
+            let formData = new FormData();
+            let imageFile = document.getElementById("imageInput").files[0];
+            formData.append("image", imageFile);
+
+            fetch("/predict", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    displayResults(data);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while processing the image.');
+            });
+        }
+    </script>
+</body>
+
+</html>

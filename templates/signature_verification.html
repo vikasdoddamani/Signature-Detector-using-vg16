@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signature Verification Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #result {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #result p {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+
+        #result span {
+            font-weight: bold;
+        }
+
+        #result .high-consistency {
+            color: green;
+        }
+
+        #result .low-consistency {
+            color: red;
+        }
+
+        h3 {
+            margin-top: 30px;
+        }
+
+        .images {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .images img {
+            max-width: 300px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .upload-section {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .upload-section input {
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .upload-section button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .upload-section button:hover {
+            background-color: #0056b3;
+        }
+
+        /* New section for explanation */
+        .explanation-section {
+            background-color: #fff;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .explanation-section h4 {
+            color: #333;
+        }
+
+        .explanation-section p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* SIFT Process Step */
+        .sift-step {
+            background-color: #f0f0f0;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .sift-step img {
+            max-width: 400px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* New section for examiner feedback */
+        .examiner-feedback-section {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .examiner-feedback-section h4 {
+            color: #333;
+        }
+
+        .examiner-feedback-section textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            min-height: 100px;
+        }
+
+        .examiner-feedback-section button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .examiner-feedback-section button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Signature Verification Result</h1>
+
+    <!-- Result Section -->
+    <div id="result">
+        <p><strong>Prediction:</strong> <span id="prediction"></span></p>
+        <p><strong>Confidence:</strong> <span id="confidence"></span></p>
+        <p><strong>Signature Consistency:</strong> <span id="consistency"></span></p>
+        <p><strong>Forgery Reasons:</strong> <span id="reasons"></span></p>
+    </div>
+
+    <!-- Processed Images Section -->
+    <h3>Processed Images:</h3>
+    <div class="images">
+        <div>
+            <img id="rgb_image" src="" alt="RGB Image" />
+            <p>RGB Image</p>
+        </div>
+        <div>
+            <img id="resized_image" src="" alt="Resized Image" />
+            <p>Resized Image</p>
+        </div>
+        <div>
+            <img id="normalized_image" src="" alt="Normalized Image" />
+            <p>Normalized Image</p>
+        </div>
+        <div>
+            <img id="sift_image" src="" alt="SIFT Image" />
+            <p>SIFT Features (Key Points)</p>
+        </div>
+    </div>
+
+    <!-- SIFT Process Steps -->
+    <div class="explanation-section">
+        <h4>SIFT Process Steps</h4>
+
+        <div class="sift-step">
+            <h5>Step 1: Scale-Space Extrema Detection</h5>
+            <p>The first step in the SIFT algorithm is to identify potential interest points that are invariant to scale. It works by constructing a scale-space by progressively blurring the image and comparing images at different scales to detect keypoints.</p>
+            <img id="sift_step1" src="" alt="Scale-Space Extrema Detection" />
+        </div>
+
+        <div class="sift-step">
+            <h5>Step 2: Keypoint Localization</h5>
+            <p>Once potential keypoints are detected, their positions are refined. We remove any points that are not stable and determine their exact location in the image.</p>
+            <img id="sift_step2" src="" alt="Keypoint Localization" />
+        </div>
+
+        <div class="sift-step">
+            <h5>Step 3: Orientation Assignment</h5>
+            <p>Each keypoint is assigned an orientation based on the local image gradient. This step ensures that the keypoints are invariant to image rotation.</p>
+            <img id="sift_step3" src="" alt="Orientation Assignment" />
+        </div>
+
+        <div class="sift-step">
+            <h5>Step 4: Keypoint Descriptor</h5>
+            <p>After assigning orientations, a descriptor is created for each keypoint. This descriptor is a vector that represents the local image gradient around each keypoint. It is used for matching keypoints across images.</p>
+            <img id="sift_step4" src="" alt="Keypoint Descriptor" />
+        </div>
+    </div>
+
+    <!-- Image Upload Section -->
+    <div class="upload-section">
+        <h3>Upload a Signature Image for Verification</h3>
+        <input type="file" id="imageInput" accept="image/*">
+        <button onclick="submitImage()">Submit</button>
+    </div>
+
+    <script>
+        // Function to display the prediction results and images
+        function displayResults(result) {
+            document.getElementById("prediction").textContent = result.prediction === 0 ? 'Genuine' : 'Forged';
+            document.getElementById("confidence").textContent = result.confidence.toFixed(2);
+            document.getElementById("consistency").textContent = result.signature_consistency;
+            document.getElementById("reasons").textContent = result.reasons;
+    
+            // Adding color to signature consistency (green for high, red for low)
+            const consistencyElement = document.getElementById("consistency");
+            if (result.signature_consistency === "High") {
+                consistencyElement.classList.add("high-consistency");
+                consistencyElement.classList.remove("low-consistency");
+            } else {
+                consistencyElement.classList.add("low-consistency");
+                consistencyElement.classList.remove("high-consistency");
+            }
+    
+            // Display processed images
+            document.getElementById("rgb_image").src = result.rgb_image;
+            document.getElementById("resized_image").src = result.resized_image;
+            document.getElementById("normalized_image").src = result.normalized_image;
+            document.getElementById("sift_image").src = result.sift_image;
+
+            document.getElementById("sift_step1").src = result.sift_step1;
+            document.getElementById("sift_step2").src = result.sift_step2;
+            document.getElementById("sift_step3").src = result.sift_step3;
+            document.getElementById("sift_step4").src = result.sift_step4;
+        }
+    
+        // Function to submit the image and get the result
+        function submitImage() {
+            const fileInput = document.getElementById('imageInput');
+            const formData = new FormData();
+            formData.append('image', fileInput.files[0]);
+    
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        throw new Error(errorData.error || 'Unknown error occurred');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                displayResults(data);
+            })
+            .catch(error => {
+                alert("Error: " + error.message);
+            });
+        }
+    </script>
+    
+</body>
+
+</html>

@@ -1,0 +1,23 @@
+// Forgery Signature Detection
+digraph {
+	A [label=Start]
+	B [label="Stroke Consistency (SC) > Threshold?"]
+	C [label="Pen Pressure (PP) Stable?"]
+	D [label="Length-to-Width Ratio (L/W) in Expected Range?"]
+	E [label="Curvature Patterns Match?"]
+	F [label="Pixel Density (PD) Homogeneous?"]
+	G [label="Likely Forgery"]
+	H [label="Genuine Signature"]
+	I [label="Possible Forgery"]
+	A -> B
+	B -> C [label=Yes]
+	B -> G [label=No]
+	C -> D [label=Yes]
+	C -> I [label=No]
+	D -> E [label=Yes]
+	D -> G [label=No]
+	E -> F [label=Yes]
+	E -> G [label=No]
+	F -> H [label=Yes]
+	F -> G [label=No]
+}
